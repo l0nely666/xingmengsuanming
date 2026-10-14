@@ -1,0 +1,199 @@
+@import "tailwindcss";
+
+/* ============================================================
+   星梦智能助手 · 全局视觉规范
+   - 深蓝背景：#020617（主页）/ #050a1f（内页）
+   - 科技蓝：  #00f0ff（边框、发光、强调）
+   - 文字：    白色 #ffffff / 淡灰 #cbd5e1
+   - 切角 HUD 卡片 + 发光边框 + 玻璃拟态
+   - 输入框：  透明底 + 青色细边框
+   ============================================================ */
+
+@theme {
+  --color-deep: #020617; /* 主页面深蓝背景 */
+  --color-panel: #050a1f; /* 内页科技蓝背景 */
+  --color-tech: #00f0ff; /* 科技蓝（主强调色） */
+  --color-dim: #cbd5e1; /* 淡灰文字 */
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-deep);
+  color: #ffffff;
+  font-family: "PingFang SC", "Microsoft YaHei", "Segoe UI", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+@layer components {
+  /* ---------- HUD 切角卡片：外层青色渐变描边 + 发光 ---------- */
+  .hud-card {
+    padding: 2px; /* 描边厚度 */
+    background: linear-gradient(160deg, rgba(0, 240, 255, 0.95), rgba(30, 90, 255, 0.5));
+    clip-path: polygon(
+      18px 0, calc(100% - 18px) 0,
+      100% 18px, 100% calc(100% - 18px),
+      calc(100% - 18px) 100%, 18px 100%,
+      0 calc(100% - 18px), 0 18px
+    );
+    filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.45));
+  }
+
+  /* HUD 卡片内层：半透明深蓝 + 玻璃模糊 */
+  .hud-card-body {
+    clip-path: polygon(
+      17px 0, calc(100% - 17px) 0,
+      100% 17px, 100% calc(100% - 17px),
+      calc(100% - 17px) 100%, 17px 100%,
+      0 calc(100% - 17px), 0 17px
+    );
+    background: rgba(5, 10, 31, 0.82);
+    backdrop-filter: blur(5px);
+  }
+
+  /* ---------- 切角按钮：外描边 + 内层深蓝渐变，hover 提亮 ---------- */
+  .hud-btn {
+    display: block;
+    width: 100%;
+    padding: 2px; /* 描边厚度 */
+    border: none;
+    cursor: pointer;
+    background: rgba(0, 240, 255, 0.8);
+    clip-path: polygon(
+      20px 0, calc(100% - 20px) 0,
+      100% 20px, 100% calc(100% - 20px),
+      calc(100% - 20px) 100%, 20px 100%,
+      0 calc(100% - 20px), 0 20px
+    );
+    filter: drop-shadow(0 0 8px rgba(0, 240, 255, 0.35));
+  }
+
+  .hud-btn > span {
+    display: block;
+    padding: 18px 24px;
+    background: linear-gradient(180deg, #0a1b4d 0%, #14409b 100%);
+    color: #fff;
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: 6px;
+    text-align: center;
+    transition: filter 0.25s ease;
+  }
+
+  .hud-btn:hover > span {
+    filter: brightness(1.4);
+  }
+
+  .hud-btn:active > span {
+    filter: brightness(1.15);
+  }
+
+  /* ---------- 输入框：透明感底 + 青色细边框 ---------- */
+  .hud-input {
+    width: 100%;
+    padding: 10px 14px;
+    background: rgba(2, 6, 23, 0.35);
+    border: 1px solid rgba(0, 240, 255, 0.55);
+    border-radius: 4px;
+    color: #fff;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .hud-input::placeholder {
+    color: rgba(203, 213, 225, 0.55);
+  }
+
+  .hud-input:focus {
+    border-color: var(--color-tech);
+    box-shadow: 0 0 8px rgba(0, 240, 255, 0.45);
+  }
+
+  /* 下拉框：复用输入框样式 + 自定义青色箭头（需与 .hud-input 连用） */
+  .hud-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%2300f0ff' stroke-width='2'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+  }
+
+  .hud-select option {
+    background: #050a1f;
+    color: #fff;
+  }
+
+  /* ---------- HUD 小工具按钮（复制 / 清空 / 重新解析 / 清空历史） ---------- */
+  .hud-tool {
+    padding: 3px 12px;
+    border: 1px solid rgba(0, 240, 255, 0.5);
+    background: rgba(2, 6, 23, 0.35);
+    color: var(--color-tech);
+    font-size: 12px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+    clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px);
+  }
+
+  .hud-tool:hover {
+    background: rgba(0, 240, 255, 0.14);
+    border-color: var(--color-tech);
+  }
+
+  .hud-tool:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+/* ---------- AI 推演中：扫描线 + 菱形脉冲动画 ---------- */
+@keyframes xm-scan {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(320%);
+  }
+}
+
+@keyframes xm-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: rotate(45deg) scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: rotate(45deg) scale(1.15);
+  }
+}
+
+.xm-scan-bar {
+  animation: xm-scan 1.6s ease-in-out infinite;
+}
+
+.xm-pulse-diamond {
+  animation: xm-pulse 1.1s ease-in-out infinite;
+}
+
+/* ---------- 发光标题（白光 + 青光） ---------- */
+.glow-title {
+  text-shadow:
+    0 0 12px rgba(255, 255, 255, 0.55),
+    0 0 32px rgba(0, 240, 255, 0.55);
+}
+
+/* ---------- 微弱网格背景（内页氛围，配合 bg-panel 使用） ---------- */
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(0, 240, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 240, 255, 0.05) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
